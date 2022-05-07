@@ -25,7 +25,7 @@ def constraint2(x):
 def cal_12(x):
     a = np.zeros(4)
     for i in range(3):
-        a[i] = x[i] - x[i+1]
+        a[i] = x[i] -2* x[i+1]
     return a
 
 
@@ -39,7 +39,7 @@ cons2 = {'type' : 'eq' , 'fun' : constraint2}
 cons3 = {'type' : 'ineq' , 'fun' :cal_12}
 cons = [cons1,cons2,cons3]
 
-sol = minimize(objective, x0, method='SLSQP', bounds=bnds, constraints=cons)
+sol = minimize(objective, x0, method='SLSQP', constraints=cons)
 print(sol)
 print('\n')
 res = sol.x[0]*sol.x[1]*sol.x[2]*sol.x[3]

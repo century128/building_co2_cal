@@ -39,7 +39,7 @@ bounds = Bounds([0, -0.5], [1.0, 2.0])
 #                constraints=[linear_constraint, nonlinear_constraint],
 #                options={'verbose': 1}, bounds=bounds)
 # print(res.x)
-x0 = np.array([0.5, 0])
+x0 = np.array([-200, 100])
 res = minimize(rosen, x0, method='SLSQP', jac="2-point",
                constraints=[eq_cons, ineq_cons,ineq_cons2], options={'ftol': 1e-9, 'disp': True},
                )

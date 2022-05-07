@@ -56,7 +56,7 @@ def object(x):
     EF_g,EF_gas,EF_coil,EF_oil = 0.6101,1.535,8.14,2.25
     beta_gfb,beta_cfb,beta_ofb = 0.9,0.84,0.9
     CE_g,CE_coil,CE_gas,CE_oil = 0,0,0,0
-    for i in range(8760):
+    for i in range(87):
         CE_g += x[i+26]
         CE_coil += x[i+17546]
         CE_gas += x[i+8786]
@@ -74,7 +74,7 @@ def object(x):
     #O&M目标 !!!!!此处改成8760求和
     om_para = [0.58,0.8,1.2,3.5,3.75,40,0.02]#各能源实时价格参数表[lep,bio,coil,gas,oil,hy,sigma]
     p_e,m_bio,m_coal,v_gas,v_oil,m_hy_purIn = 0,0,0,0,0,0
-    for i in range(8760):
+    for i in range(87):
         p_e += x[i+26]
         m_bio += x[i+105056]
         m_coal += x[i+17546]
@@ -102,30 +102,30 @@ def object(x):
 
 #---------------------约束条件--------------------------------------
 def P_cons(x):
-    p_d = np.ones(8760,dtype='float32')
-    pv_I_k = np.ones(8760,dtype='float32')
-    p_wtg_fai = np.ones(8760,dtype='float32')
-    p_con = np.zeros(8760,dtype='float32')
-    for i in range(8760):
+    p_d = np.ones(87,dtype='float32')
+    pv_I_k = np.ones(87,dtype='float32')
+    p_wtg_fai = np.ones(87,dtype='float32')
+    p_con = np.zeros(87,dtype='float32')
+    for i in range(87):
         p_con[i] = x[26 + i] + 0.75 * pv_I_k[i] * x[4] + p_wtg_fai[i] * x[9] + x[i + 96396] - p_d[i] - x[52586 + i] - x[
             201416 + i] - x[61346 + i] - x[166376 + i] - x[175136 + i] - x[i + 87625] - x[i + 78866]
     # return x[0] + x[3] + x[6] + x[5] + x[7] + x[9] + (x[15]+x[17]-x[16]-x[10])*P_hy_para[0] + P_para[3] + P_para[1] + P_para[2] + x[2] - x[14] - P_para[0] -P_pv_para[0]*P_pv_para[1]*(1-P_pv_para[2])*x[4] - P_hy_para[1]*x[17]
     return p_con
 def G_cons(x):
     # 热守恒约束参数
-    I_k = np.ones(8760,dtype='float32')
-    G_d = np.ones(8760,dtype='float32')
-    G_w = np.ones(8760,dtype='float32')
-    G_con = np.zeros(8760,dtype='float32')
-    for i in range(8760):
+    I_k = np.ones(87,dtype='float32')
+    G_d = np.ones(87,dtype='float32')
+    G_w = np.ones(87,dtype='float32')
+    G_con = np.zeros(87,dtype='float32')
+    for i in range(87):
         G_con[i] = 4*x[i+52586]+0.75*I_k[i]*x[1]+x[105056+i]*15000*0.76+x[i+61346]*0.97+x[26306+i]*16.6+x[i+8786]+x[i+17546]+x[i+26306]+x[166376+i]*4+x[i+131336]-G_d[i]-G_w[i]-x[i+192656]-x[i+122576]-0.01*x[i+113816]
     return G_con
     #return G_ashp + G_stc + G_bb + G_eb + G_hyOut + G_cfb + G_gfb + G_ofb + G_gshb - G_wt - G_d - G_dhw
 def Q_cons(x):
     # 冷守恒约束参数
-    Q_con = np.zeros(8760,dtype='float32')
-    Q_d = np.ones(8760,dtype='float32')
-    for i in range(8760):
+    Q_con = np.zeros(87,dtype='float32')
+    Q_d = np.ones(87,dtype='float32')
+    for i in range(87):
         Q_con[i]=x[i+201416]*5+5*x[i+175136]+x[i+157616]+x[i+78866]*2.5-Q_d[i]-x[i+148856]-x[i+140096]*0.01
     #return Q_ashp + Q_gshp -Q_ct - Q_d
     return Q_con
@@ -161,7 +161,7 @@ def CE_GB_incons1(x):
     EF_g, EF_gas, EF_coil, EF_oil = 0.6101, 1.535, 8.14, 2.25
     beta_gfb, beta_cfb, beta_ofb = 0.9, 0.84, 0.9
     CE_g, CE_coil, CE_gas, CE_oil = 0, 0, 0, 0
-    for i in range(8760):
+    for i in range(87):
         CE_g += x[i + 26]
         CE_coil += x[i + 17546]
         CE_gas += x[i + 8786]
@@ -208,7 +208,7 @@ def CE_GB_incons2(x):
     EF_g, EF_gas, EF_coil, EF_oil = 0.6101, 1.535, 8.14, 2.25
     beta_gfb, beta_cfb, beta_ofb = 0.9, 0.84, 0.9
     CE_g, CE_coil, CE_gas, CE_oil = 0, 0, 0, 0
-    for i in range(8760):
+    for i in range(87):
         CE_g += x[i + 26]
         CE_coil += x[i + 17546]
         CE_gas += x[i + 8786]
@@ -228,103 +228,103 @@ def CE_GB_incons2(x):
 
 #-----------氢约束----------------
 def hy_cons1(x):
-    m_hy = np.ones(8759,dtype='float32')
-    for i in range(8759):
+    m_hy = np.ones(87,dtype='float32')
+    for i in range(87):
         m_hy[i]=x[i+43827]-x[i+43826]-x[i+210176]-1.399*x[i+87625]+1/15*x[i+96386]
     return m_hy
 def hy_incons1(x):
-    p_hy_out = np.zeros(8760,dtype='float32')
-    for i in range(8760):
+    p_hy_out = np.zeros(87,dtype='float32')
+    for i in range(87):
         p_hy_out[i]=x[13]-x[i+96386]
     return p_hy_out
 def hy_incons2(x):
-    p_hy_in = np.zeros(8760,dtype='float32')
-    for i in range(8760):
+    p_hy_in = np.zeros(87,dtype='float32')
+    for i in range(87):
         p_hy_in[i] = x[25] - x[i + 87625]
     return p_hy_in
 def hy_incons3(x):
-    m_hy = np.zeros(8760,dtype='float32')
-    for i in range(8760):
+    m_hy = np.zeros(87,dtype='float32')
+    for i in range(87):
         m_hy[i] = x[10] - x[i + 43826]
     return m_hy
 #-----------地源热泵--------------
 def gshp_incons(x):
-    P_gshp = np.zeros(8760,dtype='float32')
-    for i in range(8760):
+    P_gshp = np.zeros(87,dtype='float32')
+    for i in range(87):
         P_gshp[i]=x[8]-x[i+166376]-x[i+175136]
 #-----------土壤储热系统单元-----------------------
 def bhp_cons(x):
-    g_bhp = np.zeros(8759,dtype='float32')
-    for i in range(8759):
+    g_bhp = np.zeros(87,dtype='float32')
+    for i in range(87):
         g_bhp[i] = x[i+183897]-x[i+183896]-5*x[i+175136]*1.2+0.75*4*x[i+166376]-x[i+192656]
     return g_bhp
 #---------------生物质锅炉子系统-----------------
 def bio_incons(x):
-    m_bio = np.zeros(8760,dtype='float32')
-    for i in range(8760):
+    m_bio = np.zeros(87,dtype='float32')
+    for i in range(87):
         m_bio[i] = x[2]-x[i+105056]
     return m_bio
 #--------------空气源热泵---------------------
 def ashp_incons1(x):
-    p_ashp = np.zeros(8760,dtype='float32')
-    for i in range(8760):
+    p_ashp = np.zeros(87,dtype='float32')
+    for i in range(87):
         p_ashp[i] = x[0]- x[i+52586]
     return p_ashp
 def ashp_incons2(x):
-    p_ashp = np.zeros(8760,dtype='float32')
-    for i in range(8760):
+    p_ashp = np.zeros(87,dtype='float32')
+    for i in range(87):
         p_ashp[i] = x[0]- x[i+201416]
     return p_ashp
 #--------------电锅炉---------------------
 def eb_incons(x):
-    p_eb = np.zeros(8760,dtype='float32')
-    for i in range(8760):
+    p_eb = np.zeros(87,dtype='float32')
+    for i in range(87):
         p_eb[i]=x[3]-x[i+61346]
     return p_eb
 #--------------燃气锅炉-----------------
 def gfb_incons(x):
-    g_gfb = np.zeros(8760,dtype='float32')
-    for i in range(8760):
+    g_gfb = np.zeros(87,dtype='float32')
+    for i in range(87):
         g_gfb[i] = x[5] - x[i + 8786]
     return g_gfb
 #--------------燃煤锅炉----------------
 def cfb_incons(x):
-    g_cfb = np.zeros(8760,dtype='float32')
-    for i in range(8760):
+    g_cfb = np.zeros(87,dtype='float32')
+    for i in range(87):
         g_cfb[i] = x[6] - x[i + 17546]
     return g_cfb
 #-------------燃油锅炉-----------------
 def ofb_incons(x):
-    g_ofb = np.zeros(8760,dtype='float32')
-    for i in range(8760):
+    g_ofb = np.zeros(87,dtype='float32')
+    for i in range(87):
         g_ofb[i] = x[7] - x[i + 26306]
     return g_ofb
 #-------------制冷机组----------------
 def ru_incons(x):
-    p_ru = np.zeros(8760,dtype='float32')
-    for i in range(8760):
+    p_ru = np.zeros(87,dtype='float32')
+    for i in range(87):
         p_ru[i] = x[24] - x[i + 78866]
     return p_ru
 #---------热水罐----------------------
 def wt_cons(x):
-    g_wt = np.zeros(8759,dtype='float32')
-    for i in range(8759):
+    g_wt = np.zeros(87,dtype='float32')
+    for i in range(87):
         g_wt[i]= x[i+113817]-x[i+113816]-x[i+122576]+x[i+131336]+0.01*x[i+113816]
     return g_wt
 def wt_incons(x):
-    g_wt = np.zeros(8760,dtype='float32')
-    for i in range(8760):
+    g_wt = np.zeros(87,dtype='float32')
+    for i in range(87):
         g_wt[i] = 1000*4.2*(85-45)*x[11]-x[i+113816]
     return g_wt
 #------------冷水罐-----------------
 def ct_cons(x):
-    g_ct = np.zeros(8759,dtype='float32')
-    for i in range(8759):
+    g_ct = np.zeros(87,dtype='float32')
+    for i in range(87):
         g_ct[i]= x[i+140097]-x[i+140096]-x[i+148856]+x[i+157616]+0.01*x[i+140096]
     return g_ct
 def ct_incons(x):
-    g_ct = np.zeros(8760,dtype='float32')
-    for i in range(8760):
+    g_ct = np.zeros(87,dtype='float32')
+    for i in range(87):
         g_ct[i] = 1000*4.2*(21-4)*x[12]-x[i+140096]
     return g_ct
 

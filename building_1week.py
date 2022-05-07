@@ -115,7 +115,7 @@ def G_cons(x):
     # 热守恒约束参数
     I_k = np.ones(8760,dtype='float32')
     G_d = np.ones(8760,dtype='float32')
-    G_w = np.ones(8760,dtype='float32')
+    G_w = np.ones(8769,dtype='float32')
     G_con = np.zeros(8760,dtype='float32')
     for i in range(8760):
         G_con[i] = 4*x[i+52586]+0.75*I_k[i]*x[1]+x[105056+i]*15000*0.76+x[i+61346]*0.97+x[26306+i]*16.6+x[i+8786]+x[i+17546]+x[i+26306]+x[166376+i]*4+x[i+131336]-G_d[i]-G_w[i]-x[i+192656]-x[i+122576]-0.01*x[i+113816]
