@@ -33,13 +33,15 @@ try:
     # Optimize model
     m.optimize()
 
+
+
     for v in m.getVars():
         print('%s %g' % (v.VarName, v.X))
-
+#
     print('Obj: %g' % m.ObjVal)
-
+    print('x1:%s' % x.X)
+#
 except gp.GurobiError as e:
-    print('Error code ' + str(e.errno) + ': ' + str(e))
-
+     print('Error code ' + str(e.errno) + ': ' + str(e))
 except AttributeError:
-    print('Encountered an attribute error')
+     print('Encountered an attribute error')
